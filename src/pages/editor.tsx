@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useStateWithStorage } from '../hooks/use_state_with_storage'
 import * as ReactMarkdown from 'react-markdown'
 
-const { useState } = React
 
 const Header = styled.header`
   font-size: 1.5rem;
@@ -50,7 +49,7 @@ const Preview = styled.div`
 const StorageKey = 'pages/editor:text'
 
 export const Editor: React.FC = () => {
-  const [text, setText] = useState<string>(localStorage.getItem(StorageKey) || '')
+  const [text, setText] = useStateWithStorage('', StorageKey)
 
   return (
     <>
@@ -58,13 +57,8 @@ export const Editor: React.FC = () => {
         Markdown Editor
       </Header>
       <Wrapper>
-        <TextArea
-          onChange={(event) => {
-            const changedText = event.target.value
-            localStorage.setItem(StorageKey, changedText)
-            setText(changedText)
-          }}
-          value={text}
+        <TextArea onChange={(event) => setText(event.target.value)}
+        value={text}
         />
         <Preview>
           <ReactMarkdown>{text}</ReactMarkdown>
